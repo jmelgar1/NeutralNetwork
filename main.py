@@ -93,6 +93,8 @@ def train(model):
     plt.xlabel('Cycles')
     plt.show()
 
+    ####
+
 
 def main():
     # Set the random seed for reproducibility
