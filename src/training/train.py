@@ -3,6 +3,9 @@ from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from torch import nn
 
+from src.training import evaluate
+
+
 def prepare_data(df):
     """
     Prepares the data by converting to tensors and splitting into train/test sets.
@@ -70,33 +73,6 @@ def train_model(model, X_train, y_train, learning_rate=0.01, cycles=100):
 
     return losses
 
-
-def plot_loss(losses):
-    """
-    Plots the loss over training cycles.
-
-    Args:
-        losses (list): A list of loss values recorded during training.
-    """
-    plt.plot(range(len(losses)), losses)
-    plt.ylabel('Loss')
-    plt.xlabel('Cycles')
-    plt.title('Training Loss')
-    plt.show()
-
-def evaluate_test_data(model, X_test, y_test):
-    correct = 0
-    with torch.no_grad():  # Basically turn off back propagation.
-        for i, data in enumerate(X_test, 0):
-            y_val = model.forward(data)
-            print(f'{i + 1}.) {str(y_val)} \t {y_test[i]} \t {y_val.argmax().item()}')
-
-            # Correct or not
-            if y_val.argmax().item() == y_test[i]:
-                correct += 1
-
-    print(f'{correct} correct')
-
 def train(model, df):
     """
     Main training function to prepare data, train the model, and visualize results.
@@ -112,10 +88,10 @@ def train(model, df):
     losses = train_model(model, X_train, y_train)
 
     # Step 3: Plot the loss
-    plot_loss(losses)
+    evaluate.plot_loss(losses)
 
     # Step 4: Evaluate
-    evaluate_test_data(model, X_test, y_test)
+    evaluate.evaluate_test_data(model, X_test, y_test)
 
     # Evaluation could be added here (optional)
     print("Training complete!")
